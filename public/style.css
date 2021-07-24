@@ -1,0 +1,15 @@
+table {
+	width:  100%;
+}
+
+th.nomor {
+	width:  10%;
+}
+
+th.nama, th.email {
+	width:  35%;
+}
+
+th.aksi {
+	width:  20%;
+}

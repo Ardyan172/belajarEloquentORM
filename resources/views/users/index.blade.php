@@ -5,26 +5,23 @@
 @section('judulContent', 'Halaman Users')
 
 @section('tambahUsers')
-<div class="row">
-   <div class="col-12">
-      <a href="{{ route('users.create') }}" class="btn btn-success float-right">Tambah Users</a>
-   </div>
-</div>
+<a href="{{ route('users.create') }}" class="btn btn-success">Tambah Users</a>
 @endsection
 
 @section('konten')
 <div class="card">
 	<div class="card-header">
-		<h3 class="card-title">Yo ndak tau kok tanya saya</h3>
+		<h3 class="card-title">Daftar Pengguna Yang Sudah Bergabung</h3>
 	</div>
 
 	<div class="card-body">
-		<table id="example2" class="table table-bordered table-hover">
+		<table style="width=:100%" id="example2" class="table table-bordered table-hover">
              <thead class="table-primary">
              	<tr>
-                  <th>Nomor</th>
-                  <th>Nama</th>
-                  <th>Email</th>
+                  <th class="nomor">Nomor</th>
+                  <th class="nama">Nama</th>
+                  <th class="email">Email</th>
+                  <th class="aksi">Aksi</th>
              	</tr>
          	</thead>
 
@@ -36,6 +33,11 @@
          			<td>{{ $user->name }}</td>
          			<td>{{ $user->email }}</td>
                   <!-- cetak propertynya -->
+                  <td>
+                     <a href="/bug/{{ $user->id }}" class="btn btn-sm btn-primary">Detail</a>
+                     <a href="" class="btn btn-sm btn-warning">Edit</a>
+                     <a href="" class="btn btn-sm btn-danger">Hapus</a>
+                  </td>
          		</tr>
          		@endforeach
          	</tbody>

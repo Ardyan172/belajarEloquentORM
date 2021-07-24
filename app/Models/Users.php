@@ -16,6 +16,7 @@ class Users extends Authenticatable
      *
      * @var array
      */
+    // wajib menulis property $fillable kalau menggunakan Eloquent ORM
     protected $fillable = [
         'name',
         'email',
