@@ -79,7 +79,8 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        return "ok";
+        $detailUser = Users::where('id', $id)->first();
+        return view('users.detail', ['detailUser' => $detailUser]);
     }
 
     /**
@@ -90,7 +91,8 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $detailUser = Users::where('id', $id)->first();
+        return view('users.formulirEdit', ['detailUser' => $detailUser]);
     }
 
     /**
@@ -102,7 +104,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $id;
     }
 
     /**

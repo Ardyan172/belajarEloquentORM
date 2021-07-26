@@ -34,8 +34,8 @@
          			<td>{{ $user->email }}</td>
                   <!-- cetak propertynya -->
                   <td>
-                     <a href="/bug/{{ $user->id }}" class="btn btn-sm btn-primary">Detail</a>
-                     <a href="" class="btn btn-sm btn-warning">Edit</a>
+                     <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-primary">Detail</a>
+                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning">Edit</a>
                      <a href="" class="btn btn-sm btn-danger">Hapus</a>
                   </td>
          		</tr>

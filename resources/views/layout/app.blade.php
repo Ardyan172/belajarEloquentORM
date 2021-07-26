@@ -194,7 +194,7 @@
                with font-awesome or any other icon font library -->
           <!-- Menu Dashboard -->
           <li class="nav-item">
-            <a href="/" class="{{ request()->is('dashboard') ? 'active' : '' }} nav-link">
+            <a href="/" class="{{ request()->is('/') ? 'active' : '' }} nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Dashboard</p>
             </a>
