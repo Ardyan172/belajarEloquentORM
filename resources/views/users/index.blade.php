@@ -10,12 +10,16 @@
 
 @section('konten')
 <div class="card">
+   @if (session('status'))
+      <div class="alert alert-success">{{ session('status') }}</div>
+   @endif
+
 	<div class="card-header">
 		<h3 class="card-title">Daftar Pengguna Yang Sudah Bergabung</h3>
 	</div>
 
 	<div class="card-body">
-		<table style="width=:100%" id="example2" class="table table-bordered table-hover">
+		<table style="width:100%" id="example2" class="table table-bordered table-hover">
              <thead class="table-primary">
              	<tr>
                   <th class="nomor">Nomor</th>

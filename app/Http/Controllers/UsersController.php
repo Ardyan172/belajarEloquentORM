@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 // modelsnya
 use App\Models\Users;
+// validasi
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
@@ -37,10 +40,10 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        // buat validasi
+        // lakukan validasi
         $validasiData = $request->validate([
             'name' => ['required', 'unique:users', 'min:4', 'max:20'], 
-            'email' => ['required', 'unique:users', 'max:20'],
+            'email' => ['required', 'unique:users', 'max:30'],
             'password' => ['required', 'min:7', 'max:20'],
             // index bail berfungsi menghentikan kegagalan validasi pertama
         ], [
@@ -52,13 +55,12 @@ class UsersController extends Controller
             // email
             'email.required' => 'Kamu belum memasukkan email',
             'email.unique' => 'Email ini sudah digunakan orang lain',
-            'email.max' => 'Maksimal huruf yang bisa kamu masukkan adalah 20 huruf',
+            'email.max' => 'Maksimal huruf yang bisa kamu masukkan adalah 30 huruf',
             // password
             'password.required' => 'Kamu belum memasukkan password',
-            'password.min' => 'Kamu harus memasukkan minimal 6 huruf',
+            'password.min' => 'Kamu harus memasukkan minimal 7 huruf',
             'password.max' => 'Maksimal huruf yang bisa kamu masukkan adalah 20 huruf',
         ]);
-
 
         // query insert laravel untuk menyimpan data ke table users
         $users = Users::create([
@@ -91,6 +93,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+        // ambil semua data berdasarkan id yang dikirimkan
         $detailUser = Users::where('id', $id)->first();
         return view('users.formulirEdit', ['detailUser' => $detailUser]);
     }
@@ -104,7 +107,49 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $id;
+        $validasiData = $request->validate([
+            // name
+            'name' => [
+                'required', 'min:4', 'max:20',
+                Rule::unique('users')->ignore($id),
+            ],
+            // email
+            'email' => [
+                'required', 'max:30',
+                Rule::unique('users')->ignore($id)
+            ],
+            // password
+            'password' => ['required', 'min:7', 'max:20'],
+        ], [
+            // nama
+            'name.required' => 'Nama tidak boleh kosong',
+            'name.unique' => 'Nama tadi sudah digunakan orang lain',
+            'name.min' => 'Kamu harus memasukkan minimal 4 huruf',
+            'name.max' => 'Maksimal huruf yang bisa kamu masukkan adalah 20 huruf',
+            // email
+            'email.required' => 'Email tidak boleh kosong',
+            'email.unique' => 'Email tadi sudah digunakan orang lain',
+            'email.max' => 'Maksimal huruf yang bisa kamu masukkan adalah 30 huruf',
+            // password
+            'password.required' => 'Password tidak boleh kosong',
+            'password.min' => 'Kamu harus memasukkan minimal 7 huruf',
+            'password.max' => 'Maksimal huruf yang bisa kamu masukkan adalah 20 huruf',
+        ]);
+
+
+        // cari ID di table users lalu dapatkan semua datanya
+        $users = Users::find($id);
+
+        // lakukan query update 1#
+        $users->name = $request->name;
+        $users->email = $request->email;
+        $users->password = $request->password;
+
+        // lakukan query update #2
+        $users->save();
+        
+        // mengarahkan dengan data sesi yang di flash
+        return redirect()->route('users.index')->with('status', 'Data Users Berhasil Diperbarui');
     }
 
     /**
