@@ -160,6 +160,7 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $hapusUsersBerdasarkanID = Users::where('id', $id)->delete();
+        return redirect()->route('users.index')->with('status', 'Users Berhasil Dihapus');
     }
 }
