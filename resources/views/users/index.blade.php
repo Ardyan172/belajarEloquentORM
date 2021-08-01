@@ -59,4 +59,8 @@
          </table>
 	</div>
 </div>
+
+<!-- paginasi -->
+{{ $semuaData->onEachSide(1)->links() }}
+
 @endsection

@@ -9,6 +9,8 @@ use App\Models\Users;
 // validasi
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+// paginator
+use Illuminate\Pagination\Paginator;
 
 class UsersController extends Controller
 {
@@ -19,7 +21,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return view('users.index', ['semuaData' => Users::all()]);
+        Paginator::useBootstrap();
+        return view('users.index', ['semuaData' => Users::simplePaginate(1)]);
     }
 
     /**
