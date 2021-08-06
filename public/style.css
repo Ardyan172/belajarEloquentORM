@@ -2,6 +2,7 @@ table {
 	width:  100%;
 }
 
+/* table users  */
 th.nomor {
 	width:  10%;
 }
@@ -12,4 +13,10 @@ th.nama, th.email {
 
 th.aksi {
 	width:  20%;
+}
+
+
+/* table transaksi  */
+th.namaTransaksi, th.totalBiaya, th.fotoTransaksi, th.aksiTransaksi {
+	width:  18%;
 }

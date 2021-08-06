@@ -4,7 +4,7 @@
 
 @section('judulContent', 'Halaman Users')
 
-@section('tambahUsers')
+@section('tombolTambah')
 <a href="{{ route('users.create') }}" class="btn btn-success">Tambah Users</a>
 @endsection
 

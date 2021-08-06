@@ -40,9 +40,10 @@
           <i class="fas fa-search"></i>
         </a>
         <div class="navbar-search-block">
-          <form class="form-inline">
+          <form action="{{ route('cariUser') }}" method="get" class="form-inline">
+            @csrf
             <div class="input-group input-group-sm">
-              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+              <input class="form-control form-control-navbar" type="text" name="keywordSearch" placeholder="Cari Berdasarkan Nama" aria-label="Search">
               <div class="input-group-append">
                 <button class="btn btn-navbar" type="submit">
                   <i class="fas fa-search"></i>
@@ -207,6 +208,13 @@
               <p>Users</p>
             </a>
           </li>
+          <!-- Menu Transaksi -->
+          <li class="nav-item">
+            <a href="{{ route('transaksi.index') }}" class="{{ request()->is('transaksi*') ? 'active' : '' }} nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Transaksi</p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -225,7 +233,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              @yield('tambahUsers')
+              @yield('tombolTambah')
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->

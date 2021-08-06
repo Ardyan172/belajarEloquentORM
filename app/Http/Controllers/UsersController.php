@@ -22,7 +22,7 @@ class UsersController extends Controller
     public function index()
     {
         Paginator::useBootstrap();
-        return view('users.index', ['semuaData' => Users::simplePaginate(1)]);
+        return view('users.index', ['semuaData' => Users::simplePaginate(3)]);
     }
 
     /**
@@ -165,5 +165,12 @@ class UsersController extends Controller
     {
         $hapusUsersBerdasarkanID = Users::where('id', $id)->delete();
         return redirect()->route('users.index')->with('status', 'Users Berhasil Dihapus');
+    }
+
+    public function search(Request $request)
+    {
+        $keywordSearch = $request->keywordSearch;
+        $user = Users::where('name', 'like', "%" . $keywordSearch . "%")->simplePaginate(3);
+        return view('users.index', ['semuaData' => $user]);
     }
 }
