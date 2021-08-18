@@ -5,7 +5,7 @@
 @section('judulContent', 'Halaman Transaksi')
 
 @section('tombolTambah')
-<a href="" class="btn btn-success">Tambah Transaksi</a>
+<a href="{{ route('transaksi.create') }}" class="btn btn-success">Tambah Transaksi</a>
 @endsection
 
 @section('konten')
@@ -13,6 +13,11 @@
 	<div class="card-header">
 		<h3 class="card-title">Daftar Transaksi Yang Sudah Dilakukan</h3>
 	</div>
+
+   <!-- sessi status -->
+   @if (session('status') )
+      <div class="alert alert-success">{{ session('status') }}</div>
+   @endif
 
 	<div class="card-body">
 		<table class="table table-bordered table-hover">
@@ -38,7 +43,7 @@
                   </td>
                   <!-- cetak propertynya -->
                   <td>
-                     <a href="" class="btn btn-primary btn-sm">Detail</a>
+                     <a href="{{ route('transaksi.show', $transaksi->id) }}" class="btn btn-primary btn-sm">Detail</a>
                      <a href="" class="btn btn-warning btn-sm">Edit</a>
                      <a href="" class="btn btn-danger btn-sm">Hapus</a>
                   </td>

@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaksi;
 // paginasi
 use Illuminate\Pagination\Paginator;
+// hash gambar
+use Illuminate\Support\Facades\Hash;
 
 class TransaksiController extends Controller
 {
@@ -34,7 +36,7 @@ class TransaksiController extends Controller
      */
     public function create()
     {
-        //
+        return view('transaksi.formulirCreateTransaksi');
     }
 
     /**
@@ -45,7 +47,37 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validasi error
+        $validasiFormulir = $request->validate([
+            'namaTransaksi' => ['required', 'min:2', 'max:20'],
+            'totalBiaya' => ['required'],
+            'fotoTransaksi' => ['required', 'mimes:jpg,png,jpeg', 'max:7000'],
+            // MIME
+        ], [
+            // namaTransaksi
+            'namaTransaksi.required' => 'Kamu belum memasukkan nama transaksi',
+            'namaTransaksi.min' => 'Kamu harus memasukkan minimal 2 huruf',
+            'namaTransaksi.max' => 'Maksimal huruf yang bisa kamu masukkan adalah 20',
+            // totalBiaya
+            'totalBiaya.required' => 'Kamu harus memasukkan total biaya',
+            'fotoTransaki.required' => 'Kamu harus memasukkan foto transaksi',
+            'fotoTransaksi.mimes' => 'hanya boleh memasukkan foto dengan ekstensi jpg, png, jpeg',
+            'fotoTransaksi.max' => 'Ukuran gambar maksimal 7000',
+        ]);
+
+
+        $namaFoto = time() . '.' . $request->fotoTransaksi->extension();
+        $request->fotoTransaksi->move(public_path('fotoTransaksi'), $namaFoto);
+
+        // memasukkan data ke table
+        $transaksi = new Transaksi;
+        $transaksi->namaTransaksi = $request->namaTransaksi;
+        $transaksi->totalBiaya = $request->totalBiaya;
+        $transaksi->fotoTransaksi = $namaFoto;
+        $transaksi->save();
+        
+        // return dan mengirimkan sessi flash
+        return redirect()->route('transaksi.index')->with('status', 'Transaksi Berhasil Dibuat');
     }
 
     /**
@@ -56,7 +88,9 @@ class TransaksiController extends Controller
      */
     public function show($id)
     {
-        //
+        // cari data satu baris dari tabel Transaksi berdasarkan id yang dikirimkan
+        $mengambilSatuBaris = Transaksi::find($id);
+        return view('transaksi.detailTransaksi', ['data' => $mengambilSatuBaris]);
     }
 
     /**
