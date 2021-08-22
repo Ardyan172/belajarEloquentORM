@@ -43,9 +43,13 @@
                   </td>
                   <!-- cetak propertynya -->
                   <td>
-                     <a href="{{ route('transaksi.show', $transaksi->id) }}" class="btn btn-primary btn-sm">Detail</a>
-                     <a href="" class="btn btn-warning btn-sm">Edit</a>
-                     <a href="" class="btn btn-danger btn-sm">Hapus</a>
+                     <form method="post" action="{{ route('transaksi.destroy', $transaksi->id) }}">
+                        <a href="{{ route('transaksi.show', $transaksi->id) }}" class="btn btn-primary btn-sm">Detail</a>
+                        <a href="" class="btn btn-warning btn-sm">Edit</a>
+                        @csrf    
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                     </form>
                   </td>
          		</tr>
          		@endforeach

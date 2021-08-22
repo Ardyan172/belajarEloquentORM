@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 // model
+use Illuminate\Support\Facades\DB;
 use App\Models\Transaksi;
 // paginasi
 use Illuminate\Pagination\Paginator;
-// hash gambar
-use Illuminate\Support\Facades\Hash;
 
 class TransaksiController extends Controller
 {
@@ -77,7 +76,7 @@ class TransaksiController extends Controller
         $transaksi->save();
         
         // return dan mengirimkan sessi flash
-        return redirect()->route('transaksi.index')->with('status', 'Transaksi Berhasil Dibuat');
+        return redirect()->route('transaksi.index')->with('status', 'Transaksi ' . $request->namaTransaksi . ' Berhasil Dibuat');
     }
 
     /**
@@ -117,6 +116,7 @@ class TransaksiController extends Controller
     }
 
     /**
+     * menggunakan pembuat query laravel bukan Eloquent ORM
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -124,6 +124,11 @@ class TransaksiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $transaksi = DB::table('transaksi')->where('id', $id)->first();
+        $namaTransaksi = $transaksi->namaTransaksi;
+        $foto = $transaksi->fotoTransaksi;
+        DB::table('transaksi')->where('id', '=', $id)->delete();
+        unlink(public_path('fotoTransaksi/' . $foto));
+        return redirect()->route('transaksi.index')->with('status', 'Data ' . $namaTransaksi . ' Berhasil Dihapus');
     }
 }
