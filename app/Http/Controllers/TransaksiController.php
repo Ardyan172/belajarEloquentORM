@@ -49,8 +49,8 @@ class TransaksiController extends Controller
         // validasi error
         $validasiFormulir = $request->validate([
             'namaTransaksi' => ['required', 'min:2', 'max:20'],
-            'totalBiaya' => ['required'],
-            'fotoTransaksi' => ['required', 'mimes:jpg,png,jpeg', 'max:7000'],
+            'totalBiaya' => ['required', 'min:5'],
+            'fotoTransaksi' => ['required', 'mimes:jpg,png,jpeg', 'max:5000'],
             // MIME
         ], [
             // namaTransaksi
@@ -59,9 +59,10 @@ class TransaksiController extends Controller
             'namaTransaksi.max' => 'Maksimal huruf yang bisa kamu masukkan adalah 20',
             // totalBiaya
             'totalBiaya.required' => 'Kamu harus memasukkan total biaya',
+            'totalBiaya.min' => 'Minimal transaksi adalah 10000',
             'fotoTransaki.required' => 'Kamu harus memasukkan foto transaksi',
             'fotoTransaksi.mimes' => 'hanya boleh memasukkan foto dengan ekstensi jpg, png, jpeg',
-            'fotoTransaksi.max' => 'Ukuran gambar maksimal 7000',
+            'fotoTransaksi.max' => 'Ukuran maksimal foto adalah 5 MB',
         ]);
 
 
@@ -100,7 +101,9 @@ class TransaksiController extends Controller
      */
     public function edit($id)
     {
-        //
+        // mendapatkan data satu baris menggunan Eloquent ORM
+        $dataSatuBaris = Transaksi::find($id);
+        return view('transaksi.formulirEditTransaksi', ['data' => $dataSatuBaris]);
     }
 
     /**
@@ -112,7 +115,38 @@ class TransaksiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validasiFormulir = $request->validate([
+            'namaTransaksi' => ['required', 'min:2', 'max:20'],
+            'totalBiaya' => ['required', 'min:5'],
+            'fotoTransaksi' => ['required', 'file', 'mimes:jpg,png,jpeg', 'max:5000']
+        ], [
+            // namaTransaksi
+            'namaTransaksi.required' => 'Kamu belum memasukkan nama transaksi',
+            'namaTransaksi.min' => 'Kamu harus memasukkan minimal 2 huruf',
+            'namaTransaksi.max' => 'Maksimal huruf yang bisa kamu masukkan adalah 20 huruf',
+            // totalBiaya
+            'totalBiaya.required' => 'Kamu belum memasukkan total biaya',
+            'totalBiaya.min' => 'Minimal transaksi adalah 10000',
+            'fotoTransaksi.required' => 'Kamu belum memasukkan foto transaksi',
+            'fotoTransaksi.file' => 'Hanya boleh memasukkan file foto',
+            'fotoTransaksi.mimes' => 'Hanya boleh memasukkan foto dengan ekstensi jpg, png atau jpeg',
+            'fotoTransaksi.max' => 'Ukuran maksimal foto adalah 5 MB'
+        ]);
+
+        // sql syntax
+        // ambil data satu baris berdasarkan id
+        $dataSatuBaris = Transaksi::find($id);
+        $dataSatuBaris->namaTransaksi = $request->namaTransaksi;
+        $dataSatuBaris->totalBiaya = $request->totalBiaya;
+
+        // ganti nama foto berdasarkan waktu user mengupload foto
+        $namaFotoBaru = time() . '.' . $request->fotoTransaksi->extension();
+        $dataSatuBaris->fotoTransaksi = $namaFotoBaru;
+        // pindahkan gambar ke folder public/fotoTransaksi
+        $request->fotoTransaksi->move(public_path('fotoTransaksi'), $namaFotoBaru);
+        $dataSatuBaris->save();
+        // mengarahkankan ke route sambil mengirimkan data yang di flash
+        return redirect()->route('transaksi.index')->with('status', 'Data Transaksi ' . $request->namaTransaksi . ' telah diperbarui');
     }
 
     /**
