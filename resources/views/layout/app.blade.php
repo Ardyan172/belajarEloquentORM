@@ -215,6 +215,13 @@
               <p>Transaksi</p>
             </a>
           </li>
+          <!-- Menu Guru -->
+          <li class="nav-item">
+            <a href="{{ route('guru.index') }}" class="{{ request()->is('guru*') ? 'active' : '' }} nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Guru</p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\GuruController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -14,6 +15,6 @@ Route::get('/cariUser', [UsersController::class, 'search'])->name('cariUser');
 
 // rute transaksi
 Route::resource('/transaksi', TransaksiController::class);
-Route::get('/coba', function() {
-    return time();
-});
+
+// rute guru
+Route::resource('/guru', GuruController::class);

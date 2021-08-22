@@ -18,5 +18,10 @@ th.aksi {
 
 /* table transaksi  */
 th.namaTransaksi, th.totalBiaya, th.fotoTransaksi, th.aksiTransaksi {
-	width:  18%;
+	width:  22%;
+}
+
+/* table guru  */
+th.namaGuru, th.mapel, th.umur, th.fotoGuru, th.aksiTransaksi {
+	width:  18;
 }
