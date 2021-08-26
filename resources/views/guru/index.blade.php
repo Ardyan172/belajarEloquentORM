@@ -45,7 +45,7 @@
                   <!-- cetak propertynya -->
                   <td>
                      <form action="{{ route('guru.destroy', $guru->id) }}" method="POST">
-                        @csrf
+                        @csrfc
                         <a href="{{ route('guru.show', $guru->id) }}" class="btn btn-success btn-sm">Detail</a>
                         <a href="{{ route('guru.edit', $guru->id) }}" class="btn btn-warning btn-sm">Edit</a>
 

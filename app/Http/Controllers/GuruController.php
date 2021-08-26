@@ -105,7 +105,9 @@ class GuruController extends Controller
      */
     public function edit($id)
     {
-        //
+        // cari data satu baris di table Guru berdasarkan id
+        $menampilkanData = Guru::find($id);
+        return view('guru.edit', ['data' => $menampilkanData]);
     }
 
     /**
@@ -117,7 +119,45 @@ class GuruController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validasi = $request->validate([
+            'namaGuru' => ['required', 'min:3', 'max:20'],
+            'mapel' => ['required', 'min:2', 'max:20'],
+            'umur' => ['required', 'max:2'],
+            'fotoGuru' => ['required', 'mimes:jpg,jpeg,png', 'max:5000']
+        ], [
+            // namaGuru
+            'namaGuru.required' => 'Nama guru tidak boleh kosong',
+            'namaGuru.min' => 'Minimal 3 huruf',
+            'namaGuru.max' => 'Maksimal 20 huruf',
+            // mapel
+            'mapel.required' => 'Mata pelajaran tidak boleh kosong',
+            'mapel.min' => 'Minimal 2 huruf',
+            'mapel.max' => 'Maksimal 20 huruf',
+            // umur
+            'umur.required' => 'Umur tidak boleh kosong',
+            'umur.max' => 'Maksimal berumur 99 tahun',
+            // foto guru
+            'fotoGuru.required'=> 'Masukkan foto guru',
+            'fotoGuru.mimes' => 'Hanya boleh memasukkan foto dengan ekstensi jpg, jpeg, png',
+            'fotoGuru.max' => 'Ukuran foto maksimal adalah 5 MB'
+        ]);
+
+        // mengubah nama foto berdasarkan waktu user mengupload foto
+        $namaFotoBaru = time() . $request->file('fotoGuru')->extension();
+        // pindahkan foto
+        $request->file('fotoGuru')->move(public_path('fotoGuru'), $namaFotoBaru);
+
+        // sql sintax
+        $dataSatuBaris = Guru::find($id);
+
+        $dataSatuBaris->namaGuru = $request->namaGuru;
+        $dataSatuBaris->mapel = $request->mapel;
+        $dataSatuBaris->umur = $request->umur;
+        $dataSatuBaris->fotoGuru = $namaFotoBaru;
+
+        $dataSatuBaris->save();
+
+        return redirect()->route('guru.index')->with('status', 'Data Guru ' . $request->namaGuru . ' berhasil diedit');
     }
 
     /**
@@ -128,6 +168,6 @@ class GuruController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // hapus foto di public/fotoGuru
     }
 }
