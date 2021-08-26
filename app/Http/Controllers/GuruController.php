@@ -44,7 +44,44 @@ class GuruController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validation = $request->validate([
+            'namaGuru' => ['required', 'min:3', 'max:20'],
+            'mapel' => ['required', 'min:2', 'max:20'],
+            'umur' => ['required', 'max:2'],
+            'fotoGuru' => ['required', 'mimes:jpg,png,jpeg', 'max:5000']
+        ], [
+            // namaGuru
+            'namaGuru.required' => 'Nama guru tidak boleh kosong',
+            'namaGuru.min' => 'Minimal 3 huruf',
+            'namaGuru.max' => 'Maksimal 20 huruf',
+            // mapel
+            'mapel.required' => 'Mata pelajaran tidak boleh kosong',
+            'mapel.min' => 'Masukkan minimal 2 huruf',
+            'mapel.max' => 'Maksimal 20 huruf',
+            // umur
+            'umur.required' => 'Umur tidak boleh kosong',
+            'umur.max' => 'Anda memasukkan umur yang salah',
+            // fotoGuru
+            'fotoGuru.required' => 'Masukkan foto guru',
+            'fotoGuru.mimes' => 'Hanya boleh memasukkan foto dengan ekstensi jpg, png dan jpeg',
+            'fotoGuru.max' => 'Ukuran foto maksimal adalah 5 MB',
+        ]);
+
+        // mengubah nama foto berdasarkan method time() PHP Dasar
+        $namaFotoBaru = time() . '.' . $request->file('fotoGuru')->extension();
+        // pindahkan foto ke folder public/fotoGuru
+        $request->file('fotoGuru')->move(public_path('fotoGuru'), $namaFotoBaru);
+        
+        // sql syntax
+        $guru = new Guru;
+        $guru->namaGuru = $request->namaGuru;
+        $guru->mapel = $request->mapel;
+        $guru->umur = $request->umur;
+        $guru->fotoGuru = $namaFotoBaru;
+        $guru->save();
+        
+        // tanggapan -> mengarahkan dgn data sessi yang di flash
+        return redirect()->route('guru.index')->with('status', 'Data guru ' . $request->namaGuru . ' berhasil ditambah');
     }
 
     /**
